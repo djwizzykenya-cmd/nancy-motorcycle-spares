@@ -210,7 +210,7 @@ function AdminProductsContent() {
       try {
         const response = await apiClient.post("/uploads/images", formData, {
           headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent: any) => {
+          onUploadProgress: (progressEvent) => {
             const loaded = progressEvent.loaded ?? 0;
             const total = progressEvent.total ?? 0;
             if (!total) return;
@@ -270,7 +270,7 @@ function AdminProductsContent() {
       setUploadTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: "uploading", progress: 0 } : t)));
       const response = await apiClient.post("/uploads/images", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (progressEvent: any) => {
+        onUploadProgress: (progressEvent) => {
           const loaded = progressEvent.loaded ?? 0;
           const total = progressEvent.total ?? 0;
           if (!total) return;
