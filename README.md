@@ -163,7 +163,7 @@ Full API documentation available at `/docs` once backend is running.
 
 Import the Nancy Motorcycle Spares GitHub repository into Vercel and set the project **Root Directory** to `web`. Vercel detects Next.js and builds the storefront from that directory. Git pushes to the connected repository deploy updates automatically, and Vercel provides a free `vercel.app` address.
 
-This deployment is a development preview: without the separately deployed API and database, the storefront uses local demo fallback data and does not accept real orders. Vercel's free Hobby plan is for personal, non-commercial projects; move to a plan suitable for commercial use before opening the store to customers.
+This deployment is a development preview: while `NEXT_PUBLIC_API_URL` is unset, the storefront uses local demo fallback data and does not save real orders. Deploy and configure the backend and database before accepting orders. Vercel's free Hobby plan is for personal, non-commercial projects; move to a plan suitable for commercial use before opening the store to customers.
 
 When the backend is deployed, set `NEXT_PUBLIC_API_URL` in Vercel to its public API URL (for example, `https://api.your-domain.com/api`) and redeploy. Keep backend secrets out of Vercel; configure them only on the backend host.
 
