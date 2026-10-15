@@ -1,0 +1,43 @@
+{
+  "name": "@nancy-motorcycle-spares/backend",
+  "version": "0.1.0",
+  "description": "Express.js API backend for Nancy Motorcycle Spares",
+  "private": true,
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "npm run build --prefix ../shared && prisma generate && tsc",
+    "start": "node dist/server.js",
+    "test": "jest",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "ts-node src/prisma/seed.ts",
+    "db:admin:setup": "ts-node src/prisma/ensureAdmin.ts",
+    "db:push": "prisma db push",
+    "db:deploy": "prisma migrate deploy",
+    "db:prepare": "prisma db push && prisma generate",
+    "prisma:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@prisma/client": "^5.0.0",
+    "@nancy-motorcycle-spares/shared": "file:../shared",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.22.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.4.0",
+    "redis": "^4.6.10"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^20.5.0",
+    "prisma": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
+  }
+}

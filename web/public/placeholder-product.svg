@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" role="img" aria-label="Placeholder product image">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fee2e2"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="560" fill="url(#g)"/>
+  <rect x="60" y="60" width="680" height="440" rx="32" fill="#ffffff" fill-opacity="0.85"/>
+  <circle cx="400" cy="230" r="90" fill="#dc2626" fill-opacity="0.18"/>
+  <path d="M315 250h170c16 0 28 12 28 28v18c0 16-12 28-28 28H315c-16 0-28-12-28-28v-18c0-16 12-28 28-28Z" fill="#dc2626"/>
+  <path d="M360 165l55 56-55 56-55-56 55-56Z" fill="#fff" fill-opacity="0.9"/>
+  <text x="400" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#1f2937" font-weight="700">Nancy Motorcycle Spares</text>
+</svg>

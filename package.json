@@ -1,0 +1,33 @@
+{
+  "name": "nancy-motorcycle-spares",
+  "version": "0.1.0",
+  "description": "E-commerce marketplace for motorcycle spares in Kenya",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix web",
+    "build": "npm run build --prefix web",
+    "test": "npm run test --prefix web",
+    "lint": "npm run lint --prefix web"
+  },
+  "dependencies": {
+    "next": "^16.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "overrides": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "keywords": [
+    "e-commerce",
+    "marketplace",
+    "motorcycle",
+    "spares",
+    "kenya"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "railway": "^3.12.0"
+  }
+}

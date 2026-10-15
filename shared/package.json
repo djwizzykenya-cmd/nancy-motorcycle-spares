@@ -1,0 +1,14 @@
+{
+  "name": "@nancy-motorcycle-spares/shared",
+  "version": "0.1.0",
+  "description": "Shared types and utilities for Nancy Motorcycle Spares",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

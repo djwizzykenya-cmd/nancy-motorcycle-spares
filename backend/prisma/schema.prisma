@@ -1,0 +1,240 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?
+  password  String
+  firstName String
+  lastName String
+  userType  String   @default("customer")
+  isActive  Boolean  @default(true)
+  lastLoginAt DateTime?
+
+  // Relations
+  seller    Seller?
+  customer  Customer?
+  reviews   Review[]
+  // orders and wishlist are managed on the Customer model
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Customer {
+  id        String @id @default(cuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems Json   @default("[]")
+
+  addresses Address[]
+  orders    Order[]
+  wishlist  Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model Seller {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shopName           String
+  shopDescription    String?
+  shopLogo           String?
+  commissionRate     Float    @default(0.1) // 10%
+  bankAccount        String?
+  businessRegNumber  String?
+  isApproved         Boolean  @default(false)
+  isVerified         Boolean  @default(false)
+  totalRevenue       Float    @default(0)
+
+  // Relations
+  products           Product[]
+  orders             Order[]
+  payments           Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sellers")
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  sellerId     String
+  seller       Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id])
+  price        Float
+  stock        Int
+  images       String
+  rating       Float?
+  reviewCount  Int      @default(0)
+  sku          String?  @unique
+  isActive     Boolean  @default(true)
+
+  // Relations
+  reviews      Review[]
+  orderItems   OrderItem[]
+  wishlist     Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("products")
+  @@index([sellerId])
+  @@index([categoryId])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  slug        String   @unique
+  icon        String?
+
+  // Relations
+  products    Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model Order {
+  id               String         @id @default(cuid())
+  customerId       String
+  customer         Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  sellerId         String
+  seller           Seller         @relation(fields: [sellerId], references: [id])
+  totalAmount      Float
+  status           String         @default("pending")
+  paymentStatus    String         @default("pending")
+  paymentMethod    String?
+  trackingNumber   String?
+  shippingAddressId String?
+  shippingAddress  Address?       @relation(fields: [shippingAddressId], references: [id])
+
+  // Relations
+  items            OrderItem[]
+  payments         Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("orders")
+  @@index([customerId])
+  @@index([sellerId])
+  @@index([status])
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product @relation(fields: [productId], references: [id])
+  quantity     Int
+  pricePerUnit Float
+  subtotal     Float
+
+  @@map("order_items")
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Payment {
+  id                  String        @id @default(cuid())
+  orderId             String
+  order               Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  sellerId            String
+  seller              Seller        @relation(fields: [sellerId], references: [id])
+  amount              Float
+  method              String
+  status              String @default("pending")
+  transactionId       String?       @unique
+  providerMerchantRequestId String? @unique
+  providerCheckoutRequestId String? @unique
+  providerPhone       String?
+  sellerPayout        Float
+  platformCommission  Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payments")
+  @@index([orderId])
+  @@index([status])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customerId String
+  customer  User     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  rating    Int // 1-5
+  comment   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+  @@unique([productId, customerId])
+  @@index([productId])
+  @@index([customerId])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  customerId String
+  customer  Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([customerId, productId])
+  @@map("wishlist")
+  @@index([customerId])
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String  @default("KE")
+  latitude   Float? 
+  longitude  Float? 
+  isDefault  Boolean  @default(false)
+
+  orders     Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("addresses")
+  @@index([customerId])
+}
