@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const demoFallbackEnabled = process.env.NODE_ENV !== "production" || !process.env.NEXT_PUBLIC_API_URL;
 
 type DemoUser = {
   id: string;
@@ -169,12 +170,12 @@ apiClient.interceptors.response.use(
     const shouldFallback = serverError || status === 404;
 
     const productReviewPath = requestPath.match(/^products\/([^/]+)\/reviews$/);
-    if (process.env.NODE_ENV !== "production" && productReviewPath && method === "get" && shouldFallback) {
+    if (demoFallbackEnabled && productReviewPath && method === "get" && shouldFallback) {
       return Promise.resolve(fallbackResponse(200, { reviews: [], rating: null, reviewCount: 0 }));
     }
 
     if (
-      process.env.NODE_ENV !== "production" &&
+      demoFallbackEnabled &&
       requestPath.match(/^products\/([^/]+)\/reviews\/me$/) &&
       method === "get" &&
       shouldFallback
@@ -191,7 +192,7 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (process.env.NODE_ENV === "production") {
+    if (!demoFallbackEnabled) {
       return Promise.reject(error);
     }
 
