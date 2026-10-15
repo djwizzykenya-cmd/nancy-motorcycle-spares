@@ -5,7 +5,7 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import apiClient from "@/lib/api";
+import apiClient, { isApiConfigured } from "@/lib/api";
 
 interface Product {
   id: string;
@@ -59,7 +59,11 @@ export default function HomePage() {
         console.error("Failed to load products", err);
         if (isMounted) {
           setProducts([]);
-          setProductsError("We couldn’t load products right now. Please try again.");
+          setProductsError(
+            isApiConfigured
+              ? "We couldn’t load products right now. Please try again."
+              : "Our live product catalogue is being prepared. Online ordering is not available yet."
+          );
         }
       } finally {
         if (isMounted) setLoading(false);

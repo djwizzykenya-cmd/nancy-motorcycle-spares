@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+export const isApiConfigured = Boolean(process.env.NEXT_PUBLIC_API_URL);
 const demoFallbackEnabled = process.env.NODE_ENV !== "production";
 
 type DemoUser = {

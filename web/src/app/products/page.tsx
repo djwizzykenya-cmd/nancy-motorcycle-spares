@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import apiClient from "@/lib/api";
+import apiClient, { isApiConfigured } from "@/lib/api";
 import WishlistButton from "@/components/WishlistButton";
 
 interface Category {
@@ -106,7 +106,11 @@ export default function ProductsPage() {
         console.error("Failed to load products", requestError);
         if (active) {
           setProducts([]);
-          setError("We couldn’t load the product catalog. Check your connection and try again.");
+          setError(
+            isApiConfigured
+              ? "We couldn’t load the product catalog. Check your connection and try again."
+              : "Our live product catalogue is being prepared. Online ordering is not available yet."
+          );
         }
       })
       .finally(() => {
