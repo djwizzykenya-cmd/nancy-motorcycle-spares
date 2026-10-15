@@ -159,11 +159,11 @@ Full API documentation available at `/docs` once backend is running.
 - **Database**: AWS RDS PostgreSQL
 - **Cache**: Redis Cloud
 
-### Vercel Staging Deployment (Web)
+### Vercel Web Deployment
 
 Import the Nancy Motorcycle Spares GitHub repository into Vercel and set the project **Root Directory** to `web`. Vercel detects Next.js and builds the storefront from that directory. Git pushes to the connected repository deploy updates automatically, and Vercel provides a free `vercel.app` address.
 
-This deployment is a development preview: while `NEXT_PUBLIC_API_URL` is unset, the storefront uses local demo fallback data and does not save real orders. Deploy and configure the backend and database before accepting orders. Vercel's free Hobby plan is for personal, non-commercial projects; move to a plan suitable for commercial use before opening the store to customers.
+The current site has no backend or live product database. In production, demo authentication, sample products, and simulated API responses are disabled; until a real API is connected, catalog, account, and checkout actions will not work. Do not accept orders until the backend and database are deployed, real inventory and prices are loaded, and a test order has been verified end to end. A custom domain is not required for setup or testing; the assigned `vercel.app` URL can be used first. Vercel's free Hobby plan is for personal, non-commercial use, so select a plan suitable for commercial operation before opening the store to customers.
 
 When the backend is deployed, set `NEXT_PUBLIC_API_URL` in Vercel to its public API URL (for example, `https://api.your-domain.com/api`) and redeploy. Keep backend secrets out of Vercel; configure them only on the backend host.
 
@@ -205,7 +205,7 @@ Create an S3 access key in the Supabase project under **Storage → S3**. Supaba
 - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` — Supabase S3 access key pair; these keys have broad access to project storage.
 - `AWS_REGION=eu-west-1` — the region shown in Supabase's S3 configuration.
 - `AWS_S3_BUCKET=nancy-motorcycle-spares-product-images`.
-- `AWS_ENDPOINT=https://zfhwfivynirqogixzrgr.storage.supabase.co/storage/v1/s3`.
+- `AWS_ENDPOINT=https://<project-ref>.storage.supabase.co/storage/v1/s3`.
 - `AWS_PUBLIC_BASE_URL=https://<project-ref>.supabase.co/storage/v1/object/public/nancy-motorcycle-spares-product-images`.
 
 The Supabase Free plan includes 1 GB of file storage and 5 GB of egress; free projects may pause after a week of inactivity. Check [current Supabase limits and pricing](https://supabase.com/pricing) before production traffic grows. Keep the S3 access key and secret out of Vercel and source control; only the backend needs them.
@@ -229,4 +229,4 @@ MIT
 
 ## Contact
 
-For questions or support, reach out to [your-email@example.com]
+Add Nancy Motorcycle Spares' real support email and phone number before launch.

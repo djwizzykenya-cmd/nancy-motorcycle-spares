@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import apiClient from "@/lib/api";
 
 export default function BackendStatusBanner() {
-  const [status, setStatus] = useState<"unknown" | "ok" | "down" | "demo">("unknown");
+  const [status, setStatus] = useState<"unknown" | "ok" | "down" | "notConfigured">("unknown");
 
   useEffect(() => {
     let mounted = true;
@@ -20,11 +20,9 @@ export default function BackendStatusBanner() {
         }
       } catch {
         if (!mounted) return;
-        // If apiClient used fallback demo responses, the health request may succeed locally.
-        // Detect obvious demo base by checking runtime env
         const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "/api").toString();
         if (apiUrl === "/api") {
-          setStatus("demo");
+          setStatus("notConfigured");
         } else {
           setStatus("down");
         }
@@ -46,14 +44,13 @@ export default function BackendStatusBanner() {
 
   return (
     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm text-yellow-800 rounded-md mb-4">
-      {status === "demo" ? (
+      {status === "notConfigured" ? (
         <div>
-          Admin is running in demo/fallback mode — the deployed frontend cannot reach the real backend.
-          Ensure `NEXT_PUBLIC_API_URL` is set in your Vercel project and the backend is deployed and reachable.
+          The backend API is not configured. Admin features are unavailable until the API is deployed and `NEXT_PUBLIC_API_URL` is set.
         </div>
       ) : (
         <div>
-          Backend appears unreachable. Admin actions may fall back to local/demo data. Verify the backend is deployed and `NEXT_PUBLIC_API_URL` is correct.
+          The backend API is unreachable. Admin features are unavailable; verify the API deployment and `NEXT_PUBLIC_API_URL`.
         </div>
       )}
     </div>
