@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import HomePage from "@/app/page";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import apiClient from "@/lib/api";
 
 jest.mock("@/context/AuthContext", () => ({
   useAuth: jest.fn()
@@ -58,5 +59,20 @@ describe("HomePage admin navigation", () => {
 
     expect(screen.queryByRole("link", { name: "Admin" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "My account" })).toHaveAttribute("href", "/account");
+  });
+
+  it("shows helpful navigation when the catalogue is empty", async () => {
+    jest.mocked(useAuth).mockReturnValue({
+      user: { userType: "customer" }
+    } as ReturnType<typeof useAuth>);
+    jest.mocked(apiClient.get).mockResolvedValue({ data: { data: [] } });
+
+    render(<HomePage />);
+
+    await screen.findByRole("heading", { name: "We’re getting the parts catalogue ready." });
+    expect(
+      screen.getAllByRole("link", { name: /explore categories/i }).some((link) => link.getAttribute("href") === "#categories")
+    ).toBe(true);
+    expect(screen.getByRole("link", { name: "Browse all parts" })).toHaveAttribute("href", "/products");
   });
 });
