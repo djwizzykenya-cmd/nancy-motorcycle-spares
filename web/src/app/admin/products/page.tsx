@@ -626,10 +626,13 @@ function AdminProductsContent() {
               <div>
                 <label className="block text-sm font-medium text-slate-700">Product Images</label>
                 <div className="mt-2">
-                  <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:border-red-400 hover:bg-red-50 transition">
+                  <label
+                    aria-disabled="true"
+                    className="flex w-full cursor-not-allowed items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 py-6 opacity-70"
+                  >
                     <div className="text-center">
-                      <p className="text-sm font-medium text-slate-700">📷 Click to upload images</p>
-                      <p className="text-xs text-slate-500 mt-1">JPEG, PNG, WebP or GIF; up to 5 MB each, 5 images total</p>
+                      <p className="text-sm font-medium text-slate-700">Direct image uploads are unavailable</p>
+                      <p className="mt-1 text-xs text-slate-500">Paste public image links below to add product photos.</p>
                     </div>
                     <input
                       type="file"
@@ -637,7 +640,7 @@ function AdminProductsContent() {
                       accept="image/jpeg,image/png,image/webp,image/gif"
                       onChange={handleFileUpload}
                       className="hidden"
-                      disabled={uploadingImages || saving}
+                      disabled
                     />
                   </label>
                 </div>
@@ -699,14 +702,20 @@ function AdminProductsContent() {
                   </div>
                 )}
 
-                <p className="text-xs text-slate-500 mt-2">Or paste image URLs below separated by commas</p>
+                <label htmlFor="product-image-urls" className="mt-4 block text-sm font-medium text-slate-700">
+                  Public image URLs <span className="font-normal text-slate-500">(HTTPS, comma-separated)</span>
+                </label>
                 <input
+                  id="product-image-urls"
                   type="text"
-                  placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                  placeholder="https://example.com/part-photo.jpg"
                   value={formState.images}
                   onChange={(e) => handleChange("images", e.target.value)}
                   className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 text-xs outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100"
                 />
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  Add at least one publicly accessible HTTPS image link. Separate multiple links with commas.
+                </p>
               </div>
 
               {uploadingImages && <p className="text-sm text-slate-500">Uploading images to secure storage…</p>}
